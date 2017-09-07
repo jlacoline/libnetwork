@@ -201,17 +201,11 @@ func (h *Handle) SetAnyInRange(start, end uint64) (uint64, error) {
 	if end < start || end >= h.bits {
 		return invalidPos, fmt.Errorf("invalid bit range [%d, %d]", start, end)
 	}
-	if h.Unselected() == 0 {
-		return invalidPos, ErrNoBitAvailable
-	}
 	return h.set(0, start, end, true, false)
 }
 
 // SetAny atomically sets the first unset bit in the sequence and returns the corresponding ordinal
 func (h *Handle) SetAny() (uint64, error) {
-	if h.Unselected() == 0 {
-		return invalidPos, ErrNoBitAvailable
-	}
 	return h.set(0, 0, h.bits-1, true, false)
 }
 
@@ -440,13 +434,6 @@ func (h *Handle) FromByteArray(ba []byte) error {
 // Bits returns the length of the bit sequence
 func (h *Handle) Bits() uint64 {
 	return h.bits
-}
-
-// Unselected returns the number of bits which are not selected
-func (h *Handle) Unselected() uint64 {
-	h.Lock()
-	defer h.Unlock()
-	return h.unselected
 }
 
 func (h *Handle) String() string {

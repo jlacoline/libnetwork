@@ -864,8 +864,8 @@ func TestRelease(t *testing.T) {
 		ip0 := net.ParseIP(inp.address)
 		a.ReleaseAddress(pid, ip0)
 		bm = a.addresses[SubnetKey{localAddressSpace, subnet, ""}]
-		if bm.Unselected() != 1 {
-			t.Fatalf("Failed to update free address count after release. Expected %d, Found: %d", i+1, bm.Unselected())
+		if bm.unselected != 1 {
+			t.Fatalf("Failed to update free address count after release. Expected %d, Found: %d", i+1, bm.unselected)
 		}
 
 		nw, _, err := a.RequestAddress(pid, nil, nil)
@@ -905,8 +905,8 @@ func assertGetAddress(t *testing.T, subnet string) {
 	if printTime {
 		fmt.Printf("\nTaken %v, to allocate all addresses on %s. (nemAddresses: %d. Runs: %d)", time.Since(start), subnet, numAddresses, run)
 	}
-	if bm.Unselected() != 0 {
-		t.Fatalf("Unexpected free count after reserving all addresses: %d", bm.Unselected())
+	if bm.unselected != 0 {
+		t.Fatalf("Unexpected free count after reserving all addresses: %d", bm.unselected)
 	}
 	/*
 		if bm.Head.Block != expectedMax || bm.Head.Count != numBlocks {

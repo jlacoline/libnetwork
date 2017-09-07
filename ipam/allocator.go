@@ -531,9 +531,6 @@ func (a *Allocator) getAddress(nw *net.IPNet, bitmask *bitseq.Handle, prefAddres
 
 	base = types.GetIPNetCopy(nw)
 
-	if bitmask.Unselected() <= 0 {
-		return nil, ipamapi.ErrNoAvailableIPs
-	}
 	if ipr == nil && prefAddress == nil {
 		ordinal, err = bitmask.SetAny()
 	} else if prefAddress != nil {

@@ -605,7 +605,7 @@ func TestSetUnset(t *testing.T) {
 	}
 
 	// set and unset all one by one
-	for hnd.Unselected() > 0 {
+	for hnd.unselected > 0 {
 		if _, err := hnd.SetAny(); err != nil {
 			t.Fatal(err)
 		}
@@ -620,7 +620,7 @@ func TestSetUnset(t *testing.T) {
 		t.Fatalf("Expected error. Got %v: %s", err, hnd)
 	}
 	i := uint64(0)
-	for hnd.Unselected() < numBits {
+	for hnd.unselected < numBits {
 		if err := hnd.Unset(i); err != nil {
 			t.Fatal(err)
 		}
@@ -637,7 +637,7 @@ func TestOffsetSetUnset(t *testing.T) {
 	}
 
 	// set and unset all one by one
-	for hnd.Unselected() > 0 {
+	for hnd.unselected > 0 {
 		if _, err := hnd.SetAny(); err != nil {
 			t.Fatal(err)
 		}
@@ -740,7 +740,7 @@ func TestSetInRange(t *testing.T) {
 	}
 
 	// set all bit in the first range
-	for hnd.Unselected() > 22 {
+	for hnd.unselected > 22 {
 		if o, err := hnd.SetAnyInRange(0, 7); err != nil {
 			t.Fatalf("Unexpected failure: (%d, %v)", o, err)
 		}
@@ -755,7 +755,7 @@ func TestSetInRange(t *testing.T) {
 	}
 
 	// set all bit in a second range
-	for hnd.Unselected() > 14 {
+	for hnd.unselected > 14 {
 		if o, err := hnd.SetAnyInRange(8, 15); err != nil {
 			t.Fatalf("Unexpected failure: (%d, %v)", o, err)
 		}
@@ -771,7 +771,7 @@ func TestSetInRange(t *testing.T) {
 	}
 
 	// set all bit in a range which includes the last bit
-	for hnd.Unselected() > 12 {
+	for hnd.unselected > 12 {
 		if o, err := hnd.SetAnyInRange(28, 29); err != nil {
 			t.Fatalf("Unexpected failure: (%d, %v)", o, err)
 		}
@@ -851,8 +851,8 @@ func TestMethods(t *testing.T) {
 		t.Fatalf("Unexpected bit number: %d", hnd.Bits())
 	}
 
-	if hnd.Unselected() != numBits {
-		t.Fatalf("Unexpected bit number: %d", hnd.Unselected())
+	if hnd.unselected != numBits {
+		t.Fatalf("Unexpected bit number: %d", hnd.unselected)
 	}
 
 	exp := "(0x0, 256)->end"
@@ -896,7 +896,7 @@ func TestRandomAllocateDeallocate(t *testing.T) {
 			t.Fatalf("Unexpected failure on allocation of %d: %v.\nSeed: %d.\n%s", bit, err, seed, hnd)
 		}
 	}
-	if hnd.Unselected() != 0 {
+	if hnd.unselected != 0 {
 		t.Fatalf("Expected full sequence. Instead found %d free bits. Seed: %d.\n%s", hnd.unselected, seed, hnd)
 	}
 	if hnd.head.toString() != "(0xffffffff, 16)->end" {
@@ -911,7 +911,7 @@ func TestRandomAllocateDeallocate(t *testing.T) {
 			t.Fatalf("Unexpected failure on deallocation of %d: %v.\nSeed: %d.\n%s", bit, err, seed, hnd)
 		}
 	}
-	if hnd.Unselected() != uint64(numBits) {
+	if hnd.unselected != uint64(numBits) {
 		t.Fatalf("Expected full sequence. Instead found %d free bits. Seed: %d.\n%s", hnd.unselected, seed, hnd)
 	}
 	if hnd.head.toString() != "(0x0, 16)->end" {
@@ -946,7 +946,7 @@ func TestAllocateRandomDeallocate(t *testing.T) {
 			t.Fatalf("Unexpected failure on allocation %d: %v\n%s", i, err, hnd)
 		}
 	}
-	if hnd.Unselected() != uint64(numBits/2) {
+	if hnd.unselected != uint64(numBits/2) {
 		t.Fatalf("Expected full sequence. Instead found %d free bits. %s", hnd.unselected, hnd)
 	}
 	if !hnd.head.equal(expected) {
@@ -965,7 +965,7 @@ func TestAllocateRandomDeallocate(t *testing.T) {
 			t.Fatalf("Unexpected failure on deallocation of %d: %v.\nSeed: %d.\n%s", bit, err, seed, hnd)
 		}
 	}
-	if hnd.Unselected() != uint64(3*numBits/4) {
+	if hnd.unselected != uint64(3*numBits/4) {
 		t.Fatalf("Expected full sequence. Instead found %d free bits.\nSeed: %d.\n%s", hnd.unselected, seed, hnd)
 	}
 
@@ -976,7 +976,7 @@ func TestAllocateRandomDeallocate(t *testing.T) {
 			t.Fatalf("Unexpected failure on allocation %d: %v\nSeed: %d\n%s", i, err, seed, hnd)
 		}
 	}
-	if hnd.Unselected() != uint64(numBits/2) {
+	if hnd.unselected != uint64(numBits/2) {
 		t.Fatalf("Expected half sequence. Instead found %d free bits.\nSeed: %d\n%s", hnd.unselected, seed, hnd)
 	}
 	if !hnd.head.equal(expected) {
